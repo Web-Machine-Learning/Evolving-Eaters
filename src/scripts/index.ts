@@ -1,68 +1,37 @@
-import { Input, NeuralNetwork, Output } from "./neuralNetwork/network"
-import { networkManager } from "./neuralNetwork/networkManager"
+import { MAX_RUNNER_SPEED } from "./constants"
+import { env } from "./env/env"
 
-export function init() {
+export async function main() {
 
-    window.addEventListener('load', main)
-}
-
-function main() {
-
-    networkManager.initVisuals()
-
-    const inputs = [
-        new Input(
-            'X', 
-            [
-                10,
-            ],
-            [
-                '1'
-            ],
-        ),
-        new Input(
-            'Y', 
-            [
-                8,
-            ],
-            [
-                '2'
-            ],
-        ),
-        ],
-        outputs = [
-            new Output('Z'),
-            new Output('X'),
-        ]
+    await env.init()
     
-    startNetworks(inputs, outputs)
-    setInterval(() => { runNetworks(inputs) }, 1000)
-}
-
-function startNetworks(inputs: Input[], outputs: Output[]) {
+    runUPS()
     
-    const firstNetwork = new NeuralNetwork()
-    firstNetwork.init(inputs, outputs.length)
-    firstNetwork.clone()
+    async function runUPS() {
+    
+        while (true) {
+    
+            await new Promise((resolve, reject) => {
+                setTimeout(function() {
+                    resolve(() => {})
+                }, MAX_RUNNER_SPEED / env.stats.speed)
+            })
 
-    for (const ID in networkManager.networks) {
-
-        const network = networkManager.networks[ID]
-
-        network.createVisuals(inputs, outputs)
+            await env.runUPS()
+        }
     }
-}
-
-function runNetworks(inputs: Input[]) {
-
-    for (const networkID in networkManager.networks) {
-
-        const network = networkManager.networks[networkID]
-
-        network.forwardPropagate(inputs)
-
-        network.updateVisuals(inputs)
-
-        network.mutate()
+    
+    const elements = document.getElementsByTagName('form')
+    for (const el of elements) {
+    
+        el.addEventListener('submit', stopRefresh)
     }
+    
+    function stopRefresh(event: Event) {
+    
+        event.preventDefault()
+    }
+    
+    document.addEventListener('click', event => { env.clickManager(event) })
+    document.addEventListener('contextmenu', event => { env.onContextMenu(event) })
 }

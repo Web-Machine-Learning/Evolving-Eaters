@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+
 * {
     all: unset;
     -webkit-font-smoothing: antialiased;
@@ -17,8 +19,8 @@ body {
     background-color: var(--primary);
     color: rgb(255, 255, 255);
     --main: rgb(0, 108, 250);
-    --primary: rgb(36, 42, 53);
-    --secondary: rgb(59, 59, 59);
+    --primary: rgb(51, 48, 54);
+    --secondary: rgb(32, 32, 39);
     --tertiary: rgb(38, 41, 46);
 }
 
